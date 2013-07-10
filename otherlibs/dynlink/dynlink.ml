@@ -280,3 +280,10 @@ let error_message = function
 
 let is_native = false
 let adapt_filename f = f
+
+let lookup_module name =
+  try Symtable.get_global_value (Ident.create_persistent name)
+  with Symtable.Error ex ->
+    Symtable.report_error Format.err_formatter ex;
+    Format.pp_print_flush Format.err_formatter ();
+    raise Not_found

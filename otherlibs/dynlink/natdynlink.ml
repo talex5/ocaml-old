@@ -247,3 +247,5 @@ let error_message = function
 
 let is_native = true
 let adapt_filename f = Filename.chop_extension f ^ ".cmxs"
+
+let lookup_module _ = failwith "lookup_module not implemented for native code"
