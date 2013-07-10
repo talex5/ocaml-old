@@ -36,6 +36,8 @@ val loadfile_private : string -> unit
     are hidden (cannot be referenced) from other modules dynamically
     loaded afterwards. *)
 
+val lookup_module : string -> Obj.t
+
 val adapt_filename : string -> string
 (** In bytecode, the identity function. In native code, replace the last
     extension with [.cmxs]. *)
