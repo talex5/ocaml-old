@@ -27,6 +27,10 @@ external add_primitive: dll_address -> int = "caml_dynlink_add_primitive"
 external get_current_dlls: unit -> dll_handle array
                                            = "caml_dynlink_get_current_libs"
 
+(* Can't use Config.ext_dll here as that's set at compile time. When we're
+   called by Dynlink, we may be running on a different platform. *)
+let ext_dll = if Sys.os_type = "Win32" then ".dll" else ".so"
+
 (* Current search path for DLLs *)
 let search_path = ref ([] : string list)
 
@@ -46,8 +50,8 @@ let remove_path dirs =
 (* Extract the name of a DLLs from its external name (xxx.so or -lxxx) *)
 
 let extract_dll_name file =
-  if Filename.check_suffix file Config.ext_dll then
-    Filename.chop_suffix file Config.ext_dll
+  if Filename.check_suffix file ext_dll then
+    Filename.chop_suffix file ext_dll
   else if String.length file >= 2 && String.sub file 0 2 = "-l" then
     "dll" ^ String.sub file 2 (String.length file - 2)
   else
@@ -57,7 +61,7 @@ let extract_dll_name file =
    Raise [Failure msg] in case of error. *)
 
 let open_dll mode name =
-  let name = name ^ Config.ext_dll in
+  let name = name ^ ext_dll in
   let fullname =
     try
       let fullname = Misc.find_in_path !search_path name in
