@@ -262,6 +262,24 @@ base.opt: checkstack runtime core ocaml opt-core ocamlc.opt otherlibraries \
 
 COMPLIBDIR=$(LIBDIR)/compiler-libs
 
+ziruntime: coldstart runtime library ocaml otherlibraries
+	if test -d $(BINDIR); then : ; else $(MKDIR) $(BINDIR); fi
+	if test -d $(LIBDIR); then : ; else $(MKDIR) $(LIBDIR); fi
+	if test -d $(STUBLIBDIR); then : ; else $(MKDIR) $(STUBLIBDIR); fi
+	cp VERSION $(LIBDIR)/
+	cd $(LIBDIR); rm -f dllbigarray.so dlllabltk.so dllnums.so \
+	  dllthreads.so dllunix.so dllgraphics.so dllstr.so \
+	  dlltkanim.so
+	cd byterun; $(MAKE) install
+	cp ocaml $(BINDIR)/ocaml$(EXE)
+	cd stdlib; $(MAKE) install
+	cp toplevel/topdirs.cmi $(LIBDIR)
+	for i in $(OTHERLIBRARIES); do \
+	  (cd otherlibs/$$i; $(MAKE) install) || exit $$?; \
+	done
+	if test -f ocamlopt; then $(MAKE) installopt; else :; fi
+	cp config/Makefile $(LIBDIR)/Makefile.config
+
 install:
 	if test -d $(BINDIR); then : ; else $(MKDIR) $(BINDIR); fi
 	if test -d $(LIBDIR); then : ; else $(MKDIR) $(LIBDIR); fi
@@ -326,6 +344,7 @@ clean:: partialclean
 # Shared parts of the system
 
 compilerlibs/ocamlcommon.cma: $(COMMON)
+	[ -d "compilerlibs" ] || mkdir compilerlibs
 	$(CAMLC) -a -o $@ $(COMMON)
 partialclean::
 	rm -f compilerlibs/ocamlcommon.cma

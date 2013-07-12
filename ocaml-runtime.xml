@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
+  	   xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+  <name>OCaml runtime</name>
+  <summary>ML language implementation with a class-based object system</summary>
+
+  <description>
+    OCaml is a general purpose industrial-strength programming language with an emphasis on expressiveness and safety. Developed for more than 20 years at Inria it benefits from one of the most advanced type systems and supports functional, imperative and object-oriented styles of programming.
+
+    This is the runtime package. It contains the bytecode interpreter (ocamlrun) and the toplevel (ocaml), which allows dynamic linking. It also includes the standard library, plus the Dynlink, Bigarray, Str and Unix extra libraries. Note: only changes to the last version component are binary compatible (e.g. 4.00.1 and 4.00.2 are compatible with each other, but not with 4.01.0).
+  </description>
+
+  <homepage>http://ocaml.org/</homepage>
+
+  <feed-for interface="http://repo.roscidus.com/ocaml/ocaml-runtime"/>
+
+  <group>
+    <command name="compile" shell-command='"$SRCDIR/zi_build.sh"'>
+      <compile:implementation>
+	<environment name='OCAML_HOME' mode='replace' insert=''/>
+	<environment name='OCAMLLIB' mode='replace' insert='lib'/>
+	<environment name='CAML_LD_LIBRARY_PATH' insert='lib/stublibs'/>
+	<command name="run" path="bin/ocamlrun">
+	  <arg>${OCAML_HOME}/bin/ocaml</arg>
+	</command>
+      </compile:implementation>
+    </command>
+
+    <!-- On Windows, we need to use Cygwin's make for some reason, so only
+         use the 0install make on non-Windows platforms. -->
+    <requires interface="http://repo.roscidus.com/devel/make" os="POSIX">
+      <executable-in-path name="make"/>
+    </requires>
+
+    <implementation arch="*-src" id="." version="4.0.1-pre" compile:dup-src="true"/>
+  </group>
+</interface>

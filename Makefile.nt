@@ -203,6 +203,21 @@ world.opt: coldstart opt.opt
 
 COMPLIBDIR=$(LIBDIR)/compiler-libs
 
+ziruntime: coldstart core ocaml otherlibraries
+	mkdir -p $(BINDIR)
+	mkdir -p $(LIBDIR)
+	cd byterun ; $(MAKEREC) install
+	cp ocaml $(BINDIR)/ocaml.exe
+	cd stdlib ; $(MAKEREC) install
+	cp toplevel/topdirs.cmi $(LIBDIR)
+	mkdir -p $(STUBLIBDIR)
+	for i in $(OTHERLIBRARIES); do $(MAKEREC) -C otherlibs/$$i install; done
+	cp config/Makefile $(LIBDIR)/Makefile.config
+	cp README $(DISTRIB)/Readme.general.txt
+	cp README.win32 $(DISTRIB)/Readme.windows.txt
+	cp LICENSE $(DISTRIB)/License.txt
+	cp Changes $(DISTRIB)/Changes.txt
+
 install: installbyt installopt
 
 installbyt:
@@ -257,6 +272,7 @@ clean:: partialclean
 # The compiler
 
 compilerlibs/ocamlcommon.cma: $(COMMON)
+	[ -d "compilerlibs" ] || mkdir compilerlibs
 	$(CAMLC) -a -o $@ $(COMMON)
 partialclean::
 	rm -f compilerlibs/ocamlcommon.cma
