@@ -448,7 +448,7 @@ let run_script ppf name args =
   Array.blit args 0 Sys.argv 0 len;
   Obj.truncate (Obj.repr Sys.argv) len;
   Arg.current := 0;
-  Optcompile.init_path();
+  Optcompile.init_path_with (Filename.dirname name); (* Note: would use Filename.abspath here, if we had it. *)
   toplevel_env := Optcompile.initial_env();
   Sys.interactive := false;
   use_silently ppf name
