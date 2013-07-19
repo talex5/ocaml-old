@@ -32,6 +32,6 @@
       <executable-in-path name="make"/>
     </requires>
 
-    <implementation arch="*-src" compile:dup-src="true" id="." released="2013-07-19" version="4.0.1"/>
+    <implementation arch="*-src" compile:dup-src="true" id="." version="4.0.1-post"/>
   </group>
 </interface>
