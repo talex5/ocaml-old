@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
-<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
-  	   xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
   <name>OCaml runtime</name>
   <summary>ML language implementation with a class-based object system</summary>
 
@@ -15,11 +15,11 @@
   <feed-for interface="http://repo.roscidus.com/ocaml/ocaml-runtime"/>
 
   <group>
-    <command name="compile" shell-command='"$SRCDIR/zi_build.sh"'>
+    <command name="compile" shell-command="&quot;$SRCDIR/zi_build.sh&quot;">
       <compile:implementation>
-	<environment name='OCAML_HOME' mode='replace' insert=''/>
-	<environment name='OCAMLLIB' mode='replace' insert='lib'/>
-	<environment name='CAML_LD_LIBRARY_PATH' insert='lib/stublibs'/>
+	<environment insert="" mode="replace" name="OCAML_HOME"/>
+	<environment insert="lib" mode="replace" name="OCAMLLIB"/>
+	<environment insert="lib/stublibs" name="CAML_LD_LIBRARY_PATH"/>
 	<command name="run" path="bin/ocamlrun">
 	  <arg>${OCAML_HOME}/bin/ocaml</arg>
 	</command>
@@ -32,6 +32,6 @@
       <executable-in-path name="make"/>
     </requires>
 
-    <implementation arch="*-src" id="." version="4.0.1-pre" compile:dup-src="true"/>
+    <implementation arch="*-src" compile:dup-src="true" id="." released="2013-07-19" version="4.0.1"/>
   </group>
 </interface>
